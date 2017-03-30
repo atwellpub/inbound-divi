@@ -58,8 +58,28 @@ if (!class_exists('Inbound_DIVI')) {
 
                 /* adds supporting js */
                 add_action('admin_head', array(__CLASS__, 'add_admin_js'));
+
+                /* Setup Automatic Updating & Licensing */
+                add_action('admin_init', array(__CLASS__, 'license_setup'));
             }
-            
+
+        }
+
+
+        /**
+         * Setups Software Update API
+         */
+        public static function license_setup() {
+
+            /* ignore these hooks if inbound pro is active */
+            if (defined('INBOUND_PRO_CURRENT_VERSION')) {
+                return;
+            }
+
+            /*PREPARE THIS EXTENSION FOR LICESNING*/
+            if (class_exists('Inbound_License')) {
+                $license = new Inbound_License(INBOUND_DIVI_FILE, INBOUND_DIVI_LABEL, INBOUND_DIVI_SLUG, INBOUND_DIVI_CURRENT_VERSION, INBOUND_DIVI_REMOTE_ITEM_NAME);
+            }
         }
 
         /**
