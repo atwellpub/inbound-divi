@@ -3,7 +3,7 @@
 Plugin Name: Inbound Extension - Divi theme support
 Plugin URI: http://www.inboundnow.com/
 Description: Adds Divi Page Builder features to the landing page custom post type. Only supports 'Current Theme' as template.
-Version: 1.0.1
+Version: 1.0.2
 Author: Inbound Now
 Contributors: Hudson Atwell
 Author URI: http://www.inboundnow.com/
@@ -31,7 +31,7 @@ if (!class_exists('Inbound_DIVI')) {
          *  Define constants
          */
         public static function define_constants() {
-            define('INBOUND_DIVI_CURRENT_VERSION', '1.0.1');
+            define('INBOUND_DIVI_CURRENT_VERSION', '1.0.2');
             define('INBOUND_DIVI_LABEL', __('Divi Integration', 'inbound-pro'));
             define('INBOUND_DIVI_SLUG', 'inbound-divi');
             define('INBOUND_DIVI_FILE', __FILE__);
