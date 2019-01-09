@@ -2,8 +2,8 @@
 /*
 Plugin Name: Inbound Extension - Divi theme support
 Plugin URI: http://www.inboundnow.com/
-Description: Adds Divi Page Builder features to the landing page custom post type. Only supports 'Current Theme' as template.
-Version: 1.0.3
+Description: Adds Divi Page Builder features to the landing page custom post type. Only supports 'Current Theme' as template. Only workes with classic Divi editor.
+Version: 1.0.4
 Author: Inbound Now
 Contributors: Hudson Atwell
 Author URI: http://www.inboundnow.com/
@@ -31,7 +31,7 @@ if (!class_exists('Inbound_DIVI')) {
          *  Define constants
          */
         public static function define_constants() {
-            define('INBOUND_DIVI_CURRENT_VERSION', '1.0.3');
+            define('INBOUND_DIVI_CURRENT_VERSION', '1.0.4');
             define('INBOUND_DIVI_LABEL', __('Divi Integration', 'inbound-pro'));
             define('INBOUND_DIVI_SLUG', 'inbound-divi');
             define('INBOUND_DIVI_FILE', __FILE__);
@@ -64,6 +64,33 @@ if (!class_exists('Inbound_DIVI')) {
                 add_action('admin_init', array(__CLASS__, 'license_setup'));
             }
 
+            /* add ajax save support */
+            add_action( 'init', array( __CLASS__ , 'et_fb_ajax_save' ) , 1 );
+
+        }
+
+        public static function et_fb_ajax_save() {
+
+            if (!isset($_REQUEST['modules'])
+                ||
+                !isset($_REQUEST['action']) && $_REQUEST['action'] != 'et_fb_ajax_save'
+            ) {
+                return;
+            }
+
+            $shortcode_data = json_decode( stripslashes( $_POST['modules'] ), true );
+            $layout_type = '';
+
+            $post_content = et_fb_process_to_shortcode( $shortcode_data, array(), $layout_type );
+            $variation_id = Landing_Pages_Variations::get_current_variation_id();
+
+            if (!$variation_id) {
+                $key = "content";
+            } else {
+                $key = "content-".$variation_id;
+            }
+
+            update_post_meta( (int) $_REQUEST['post_id'] , $key, $post_content);
         }
 
 
